@@ -1,0 +1,22 @@
+# Object files and dependency files (-MMD generates .d files)
+*.o
+*.d
+
+# Executables
+wam
+main
+a.out
+
+# Debug symbols (macOS)
+*.dSYM/
+
+# Libraries
+*.a
+*.so
+*.dylib
+
+# Editor / IDE
+.vscode/
+
+# macOS
+.DS_Store

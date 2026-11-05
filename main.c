@@ -3,6 +3,7 @@
 #include <unistd.h>
 #include <time.h>
 
+#include <deq.h>
 #include "lawn.h"
 #include "mole.h"
  
