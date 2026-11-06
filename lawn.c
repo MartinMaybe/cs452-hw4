@@ -18,6 +18,11 @@ static void *run(void *l) {
   return lawnimp_run(r);
 }
 
+/** 
+ * Allocates a LawnRep, stores the sizes, creates the display with 
+ * lawnimp_new, and starts the lawnimp_run thread. Passing 0 selects 
+ * defaults.
+ */
 extern Lawn lawn_new(int lawnsize, int molesize) {
   if (!lawnsize) lawnsize=40;
   if (!molesize) molesize=15;
@@ -34,6 +39,10 @@ extern Lawn lawn_new(int lawnsize, int molesize) {
   return lawn;
 }
 
+/**
+ * Calls lawnimp_free on the window, then pthread_joins the lawn thread, 
+ * then frees the struct.
+ */
 extern void lawn_free(Lawn l) {
   LawnRep r=(LawnRep)l;
   lawnimp_free(r->window);

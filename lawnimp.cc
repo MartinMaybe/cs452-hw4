@@ -44,6 +44,10 @@ static int text() {
 #define WR(X,Y,MSG) printf("(%d,%d) %d %s %s\n",X,Y, gettid(), __func__,MSG)
 #define WR0 { WR(0,0,""); return 0; }
 
+/**
+ * Text mode: prints a line and returns 0. GUI mode: creates a lawnsize*molesize square Fl_Window, 
+ * shows it, calls Fl::lock(), and returns the window.
+ */
 extern LINKAGE void* lawnimp_new(int lawnsize, int molesize) {
   if (text()) WR0;
   int size=lawnsize*molesize;
@@ -54,12 +58,20 @@ extern LINKAGE void* lawnimp_new(int lawnsize, int molesize) {
   return w;
 }
 
+/**
+ * Text mode: prints a line and returns, so the lawn thread ends almost immediately. GUI mode: runs 
+ * Fl::run(), the FLTK event loop, until the window is deleted.
+ */
 extern LINKAGE void* lawnimp_run(LawnRep l) {
   if (text()) WR0;
   Fl::run();
   return 0;
 }
 
+/**
+ * Prints “creating”, sleeps vim0 seconds, then prints “created”. In GUI mode it then adds a green 
+ * oval box at (x,y) and returns it as mole->box.
+ */
 extern LINKAGE void* lawnimp_mole(MoleRep m) {
   if (text()) {
     WR(m->x,m->y,"creating");
@@ -82,6 +94,10 @@ extern LINKAGE void* lawnimp_mole(MoleRep m) {
   return b;
 }
 
+/**
+ * Prints “whacking”, sleeps vim1, turns the mole red (“whacked”), sleeps vim2, then hides and 
+ * deletes the box (“expired”).
+ */
 extern LINKAGE void lawnimp_whack(MoleRep m) {
   if (text()) {
     WR(m->x,m->y,"whacking");
@@ -110,6 +126,10 @@ extern LINKAGE void lawnimp_whack(MoleRep m) {
   delete b;
 }
 
+/**
+ * Deletes the window under Fl::lock(), which makes Fl::run() return so lawn_free’s 
+ * pthread_join can finish.
+ */
 extern LINKAGE void lawnimp_free(void* w) {
   Fl::lock();
   delete (Fl_Window*)w;
