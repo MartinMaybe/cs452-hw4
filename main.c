@@ -33,10 +33,10 @@ int main() {
   Mtq q = mtq_new(4);
   void *arg[] = {q, lawn};
 
-  Thread produce = thr_start(n, produce, arg);
-  Thread consume = thr_start(n, consume, arg);
-  thr_wait(produce);
-  thr_wait(consume);
+  Thread producers = thr_start(n, produce, arg);
+  Thread consumers = thr_start(n, consume, arg);
+  thr_wait(producers);
+  thr_wait(consumers);
 
   mtq_del(q, NULL);
   lawn_free(lawn);
